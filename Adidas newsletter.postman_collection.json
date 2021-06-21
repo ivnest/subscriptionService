@@ -1,0 +1,135 @@
+{
+	"info": {
+		"_postman_id": "ea5f32cb-8785-4be2-afab-f3d9c700c5dd",
+		"name": "Adidas newsletter",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get one client subscriptions",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/subscriptions/client/1",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"subscriptions",
+						"client",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Send newsletter",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/subscriptions/send-newsletter/1",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"subscriptions",
+						"send-newsletter",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get one subscription detail from one client",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/subscriptions/subscription/1/client/1",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"subscriptions",
+						"subscription",
+						"1",
+						"client",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Subscribe one client to one newsletter",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/subscriptions/subscription/1/client/1",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"subscriptions",
+						"subscription",
+						"1",
+						"client",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete one client subscription to one newsletter",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/subscriptions/subscription/1/client/1",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"subscriptions",
+						"subscription",
+						"1",
+						"client",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

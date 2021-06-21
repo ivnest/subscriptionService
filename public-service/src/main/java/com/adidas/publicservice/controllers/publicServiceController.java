@@ -88,8 +88,7 @@ public class publicServiceController {
 
 	@PostMapping("send-newsletter/{newsletterId}")
 	public ResponseEntity<ResponseDto> sendNewsletter(@PathVariable String newsletterId) {
-
-		return restTemplate.exchange("http://" + emailServiceHost + "/send-newsletter/" + newsletterId, HttpMethod.POST,
+		return restTemplate.exchange("http://" + emailServiceHost + "/subscriptions/send-newsletter/" + newsletterId, HttpMethod.POST,
 				null, new ParameterizedTypeReference<ResponseDto>() {
 				});
 	}

@@ -1,4 +1,4 @@
-package com.vinesh.servicediscovery;
+package com.adidas.servicediscovery;
 
 import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;

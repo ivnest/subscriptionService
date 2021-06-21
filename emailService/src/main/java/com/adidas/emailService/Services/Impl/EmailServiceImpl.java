@@ -27,12 +27,13 @@ public class EmailServiceImpl implements EmailService {
 
 	@Override
 	public void sendNewsletter(long newsletterId) {
-		List<SubscriptionEntity> subscriptionsByNewsletterId = subscriptionRepository.findByIdNewsletter(newsletterId);
+		NewsletterEntity newsletter = newsletterRepository.findById(newsletterId).get();
+		List<SubscriptionEntity> subscriptionsByNewsletterId = subscriptionRepository
+				.findByIdNewsletter(newsletter.getIdNewsletter());
 		List<String> recipients = new ArrayList<>();
 		subscriptionsByNewsletterId.forEach(subscriptionEntity -> {
 			recipients.add(userRepository.findById(subscriptionEntity.getIdClient()).get().getEmail());
 		});
-		NewsletterEntity newsletter = newsletterRepository.findById(newsletterId).get();
 
 		// Now we have al necessary information to send email (I have stoped here
 		// because it's just only a mock).

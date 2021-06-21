@@ -42,10 +42,8 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 		List<NewsletterEntity> allNewsletter = newsletterRepository.findAll();
 		Set<String> set = new HashSet<>();
 		List<NewsletterEntity> newsletterWithDistinctIdNewsletter = allNewsletter.stream()
-		            .filter(e -> set.add(e.getIdNewsletter()))
-		            .collect(Collectors.toList());
-		
-		
+				.filter(e -> set.add(e.getIdNewsletter())).collect(Collectors.toList());
+
 		List<NewsLetterInfoDto> newsLetterInfoDto = new ArrayList<>();
 		newsletterWithDistinctIdNewsletter.forEach(newsletterEntity -> {
 			Optional<SubscriptionEntity> optionalSubscription = subscriptionRepository
@@ -64,11 +62,12 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 	public SubscriptionInfoDto getSubscription(String subscriptionId, String idClient) {
 		Optional<SubscriptionEntity> optionalSubscription = subscriptionRepository
 				.findByIdClientAndIdNewsletter(Long.valueOf(idClient), subscriptionId);
+		NewsletterEntity newsletterEntity = newsletterRepository.findById(Long.valueOf(subscriptionId)).get();
 		List<NewsLetterInfoDto> newsLetterInfoDto = new ArrayList<>();
 		if (optionalSubscription.isPresent()) {
-			subscriptionMapper.createNewsletterInfoDto(newsLetterInfoDto, subscriptionId, true);
+			subscriptionMapper.createNewsletterInfoDto(newsLetterInfoDto, newsletterEntity.getIdNewsletter(), true);
 		} else {
-			subscriptionMapper.createNewsletterInfoDto(newsLetterInfoDto, subscriptionId, false);
+			subscriptionMapper.createNewsletterInfoDto(newsLetterInfoDto, newsletterEntity.getIdNewsletter(), false);
 		}
 		return subscriptionMapper.createSubscriptionInfoDto(newsLetterInfoDto,
 				userRepository.findById(Long.valueOf(idClient)).get());
@@ -83,7 +82,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 	public UserDto deleteSubscription(String idNewsletter, String idClient) {
 		System.out.println(idNewsletter);
 		System.out.println(idClient);
-		if(subscriptionRepository.existsByIdClientAndIdNewsletter(Long.valueOf(idClient), idNewsletter)) {
+		if (subscriptionRepository.existsByIdClientAndIdNewsletter(Long.valueOf(idClient), idNewsletter)) {
 			subscriptionRepository.deleteByIdClientAndIdNewsletter(Long.valueOf(idClient), idNewsletter);
 		}
 		return new UserDto(idClient);
