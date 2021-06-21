@@ -1,0 +1,32 @@
+version: '3.8'
+services:
+  service-discovery:
+    image: service-discovery
+    restart: always
+    container_name: service-discovery
+    ports:
+      - '8761:8761'
+    networks:
+      - 'dockernetflix-network'
+  public-service:
+    image: public-service
+    restart: always
+    container_name: public-service
+    ports:
+      - '8080:8080'
+    networks:
+      - 'dockernetflix-network'
+  subscriptionService:
+    image: subscriptionService
+    restart: always
+    container_name: subscriptionService
+    networks:
+      - 'dockernetflix-network'
+  emailService:
+    image: emailService
+    restart: always
+    container_name: emailService
+    networks:
+      - 'dockernetflix-network'
+networks:
+  dockernetflix-network: #necesitamos crear en una red para alojar los servicios en ella y que pu
