@@ -6,6 +6,9 @@ services:
     container_name: service-discovery
     ports:
       - '8761:8761'
+    build:
+      context: ./service-discovery
+      dockerfile: Dockerfile
     networks:
       - 'dockernetflix-network'
   public-service:
@@ -14,18 +17,27 @@ services:
     container_name: public-service
     ports:
       - '8080:8080'
+    build:
+      context: ./public-service
+      dockerfile: Dockerfile
     networks:
       - 'dockernetflix-network'
   subscriptionService:
-    image: subscriptionService
+    image: subscriptionservice
     restart: always
-    container_name: subscriptionService
+    container_name: subscriptionservice
+    build:
+      context: ./subscriptionService
+      dockerfile: Dockerfile
     networks:
       - 'dockernetflix-network'
   emailService:
-    image: emailService
+    image: emailservice
     restart: always
-    container_name: emailService
+    container_name: emailservice
+    build:
+      context: ./emailService
+      dockerfile: Dockerfile
     networks:
       - 'dockernetflix-network'
 networks:
