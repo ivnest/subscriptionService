@@ -38,12 +38,23 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 	@Autowired
 	SubscriptionMapper subscriptionMapper;
 
+	/**
+	 * return the list of all subscriptions of a client (and indicates if client is
+	 * subscribed or not)
+	 */
 	public SubscriptionInfoDto listAllSubscription(String idClient) {
+		// Get all newsletters
 		List<NewsletterEntity> allNewsletter = newsletterRepository.findAll();
+		
+		// Filter by distinct idNewsletter (clients are subscribed to an idNewsletter)
+		// which is like a group (for example only summer collection newsletters but not
+		// winter collection newsletters). It could be a lot of newsletter with the same
+		// idNewsletter
 		Set<String> set = new HashSet<>();
 		List<NewsletterEntity> newsletterWithDistinctIdNewsletter = allNewsletter.stream()
 				.filter(e -> set.add(e.getIdNewsletter())).collect(Collectors.toList());
 
+		// Create subscriptionInfoDto object
 		List<NewsLetterInfoDto> newsLetterInfoDto = new ArrayList<>();
 		newsletterWithDistinctIdNewsletter.forEach(newsletterEntity -> {
 			Optional<SubscriptionEntity> optionalSubscription = subscriptionRepository
@@ -59,6 +70,9 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 				userRepository.findById(Long.valueOf(idClient)).get());
 	}
 
+	/**
+	 * return one client subscription information
+	 */
 	public SubscriptionInfoDto getSubscription(String subscriptionId, String idClient) {
 		Optional<SubscriptionEntity> optionalSubscription = subscriptionRepository
 				.findByIdClientAndIdNewsletter(Long.valueOf(idClient), subscriptionId);
@@ -73,15 +87,19 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 				userRepository.findById(Long.valueOf(idClient)).get());
 	}
 
+	/**
+	 * A client subscribes to a newsletter
+	 */
 	public UserDto createSubscription(String subscriptionId, String idClient) {
 		subscriptionRepository.save(subscriptionMapper.createSubscriptionEntity(subscriptionId, idClient));
 		return new UserDto(idClient);
 	}
 
+	/**
+	 * A client unsubscribes to a newsletter
+	 */
 	@Transactional
 	public UserDto deleteSubscription(String idNewsletter, String idClient) {
-		System.out.println(idNewsletter);
-		System.out.println(idClient);
 		if (subscriptionRepository.existsByIdClientAndIdNewsletter(Long.valueOf(idClient), idNewsletter)) {
 			subscriptionRepository.deleteByIdClientAndIdNewsletter(Long.valueOf(idClient), idNewsletter);
 		}

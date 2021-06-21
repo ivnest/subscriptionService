@@ -20,6 +20,11 @@ public class EmailServiceController {
 	@Autowired
 	EmailService emailService;
 
+	/**
+	 * A newsletter is sent to all subscribers
+	 * @param newsletterId
+	 * @return an ok message
+	 */
 	@PostMapping("send-newsletter/{newsletterId}")
 	public ResponseEntity<ResponseDto> createSubscription(@PathVariable long newsletterId) {
 		emailService.sendNewsletter(newsletterId);

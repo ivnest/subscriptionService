@@ -23,12 +23,24 @@ public class subscriptionServiceController {
 	@Autowired
 	SubscriptionService subscriptionService;
 
+	/**
+	 * 
+	 * @param clientId
+	 * @return the list of all subscriptions of a client (and indicates if client is
+	 *         subscribed or not)
+	 */
 	@GetMapping("/client/{clientId}")
 	public ResponseEntity<SubscriptionInfoDto> listSubscriptions(@PathVariable String clientId) {
 		return new ResponseEntity<SubscriptionInfoDto>(subscriptionService.listAllSubscription(clientId),
 				HttpStatus.OK);
 	}
 
+	/**
+	 * 
+	 * @param subscriptionId
+	 * @param clientId
+	 * @return one client subscription information
+	 */
 	@GetMapping("subscription/{subscriptionId}/client/{clientId}")
 	public ResponseEntity<SubscriptionInfoDto> getSubscription(@PathVariable String subscriptionId,
 			@PathVariable String clientId) {
@@ -36,6 +48,12 @@ public class subscriptionServiceController {
 				HttpStatus.OK);
 	}
 
+	/**
+	 * A client subscribes to a newsletter
+	 * @param subscriptionId
+	 * @param clientId
+	 * @return clientId
+	 */
 	@PostMapping("subscription/{subscriptionId}/client/{clientId}")
 	public ResponseEntity<UserDto> createSubscription(@PathVariable String subscriptionId,
 			@PathVariable String clientId) {
@@ -43,6 +61,12 @@ public class subscriptionServiceController {
 				HttpStatus.OK);
 	}
 
+	/**
+	 * A client unsubscribes to a newsletter
+	 * @param subscriptionId
+	 * @param clientId
+	 * @return clientId
+	 */
 	@DeleteMapping("subscription/{subscriptionId}/client/{clientId}")
 	public ResponseEntity<UserDto> deleteSubscription(@PathVariable String subscriptionId,
 			@PathVariable String clientId) {

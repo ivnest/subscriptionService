@@ -41,6 +41,16 @@ public class publicServiceController {
 	@Autowired
 	ObjectMapper objectMapper;
 
+	/**
+	 * 
+	 * @param clientId
+	 * @return the list of all subscriptions of a client (and indicates if client is
+	 *         subscribed or not)
+	 * @throws JsonParseException
+	 * @throws JsonMappingException
+	 * @throws RestClientException
+	 * @throws IOException
+	 */
 	@GetMapping("/client/{clientId}")
 	public ResponseEntity<SubscriptionInfoDto> listSubscriptions(@PathVariable String clientId)
 			throws JsonParseException, JsonMappingException, RestClientException, IOException {
@@ -51,6 +61,12 @@ public class publicServiceController {
 				});
 	}
 
+	/**
+	 * 
+	 * @param subscriptionId
+	 * @param clientId
+	 * @return one client subscription information
+	 */
 	@GetMapping("subscription/{subscriptionId}/client/{clientId}")
 	public ResponseEntity<SubscriptionInfoDto> getSubscription(@PathVariable String subscriptionId,
 			@PathVariable String clientId) {
@@ -63,6 +79,12 @@ public class publicServiceController {
 						});
 	}
 
+	/**
+	 * A client subscribes to a newsletter
+	 * @param subscriptionId
+	 * @param clientId
+	 * @return clientId
+	 */
 	@PostMapping("subscription/{subscriptionId}/client/{clientId}")
 	public ResponseEntity<UserDto> createSubscription(@PathVariable String subscriptionId,
 			@PathVariable String clientId) {
@@ -75,6 +97,12 @@ public class publicServiceController {
 						});
 	}
 
+	/**
+	 * A client unsubscribes to a newsletter
+	 * @param subscriptionId
+	 * @param clientId
+	 * @return clientId
+	 */
 	@DeleteMapping("subscription/{subscriptionId}/client/{clientId}")
 	public ResponseEntity<UserDto> deleteSubscription(@PathVariable String subscriptionId,
 			@PathVariable String clientId) {
@@ -86,10 +114,15 @@ public class publicServiceController {
 						});
 	}
 
+	/**
+	 * A newsletter is sent to all subscribers
+	 * @param newsletterId
+	 * @return an ok message
+	 */
 	@PostMapping("send-newsletter/{newsletterId}")
 	public ResponseEntity<ResponseDto> sendNewsletter(@PathVariable String newsletterId) {
-		return restTemplate.exchange("http://" + emailServiceHost + "/subscriptions/send-newsletter/" + newsletterId, HttpMethod.POST,
-				null, new ParameterizedTypeReference<ResponseDto>() {
+		return restTemplate.exchange("http://" + emailServiceHost + "/subscriptions/send-newsletter/" + newsletterId,
+				HttpMethod.POST, null, new ParameterizedTypeReference<ResponseDto>() {
 				});
 	}
 }

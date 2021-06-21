@@ -25,9 +25,15 @@ public class EmailServiceImpl implements EmailService {
 	@Autowired
 	SubscriptionRepository subscriptionRepository;
 
+	/**
+	 * A newsletter is sent to all subscribers
+	 */
 	@Override
 	public void sendNewsletter(long newsletterId) {
+		// Find newsletter
 		NewsletterEntity newsletter = newsletterRepository.findById(newsletterId).get();
+
+		// Find subscribers of this newsletter
 		List<SubscriptionEntity> subscriptionsByNewsletterId = subscriptionRepository
 				.findByIdNewsletter(newsletter.getIdNewsletter());
 		List<String> recipients = new ArrayList<>();

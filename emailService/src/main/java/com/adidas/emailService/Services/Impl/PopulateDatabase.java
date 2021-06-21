@@ -27,7 +27,10 @@ public class PopulateDatabase {
 	public PopulateDatabase() {
 
 	}
-
+	
+	/**
+	 * This method is executed when application starts and populate (in-memory) database
+	 */
 	@PostConstruct
 	@Transactional
 	public void fillData() {
