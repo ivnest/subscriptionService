@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
@@ -52,13 +54,17 @@ public class publicServiceController {
 	 * @throws IOException
 	 */
 	@GetMapping("/client/{clientId}")
-	public ResponseEntity<SubscriptionInfoDto> listSubscriptions(@PathVariable String clientId)
-			throws JsonParseException, JsonMappingException, RestClientException, IOException {
+	public ResponseEntity listSubscriptions(@PathVariable String clientId) {
+		try {
+			return restTemplate.exchange("http://" + subscriptionServiceHost + "/subscriptions/client/" + clientId,
 
-		return restTemplate.exchange("http://" + subscriptionServiceHost + "/subscriptions/client/" + clientId,
+					HttpMethod.GET, null, new ParameterizedTypeReference<SubscriptionInfoDto>() {
+					});
+		} catch (HttpStatusCodeException e) {
+			return ResponseEntity.status(HttpStatus.FAILED_DEPENDENCY)
+					.body("There has been a problem in subscription service");
+		}
 
-				HttpMethod.GET, null, new ParameterizedTypeReference<SubscriptionInfoDto>() {
-				});
 	}
 
 	/**
@@ -68,61 +74,87 @@ public class publicServiceController {
 	 * @return one client subscription information
 	 */
 	@GetMapping("subscription/{subscriptionId}/client/{clientId}")
-	public ResponseEntity<SubscriptionInfoDto> getSubscription(@PathVariable String subscriptionId,
-			@PathVariable String clientId) {
+	public ResponseEntity getSubscription(@PathVariable String subscriptionId, @PathVariable String clientId) {
+		try {
+			return restTemplate
+					.exchange(
+							"http://" + subscriptionServiceHost + "/subscriptions/subscription/" + subscriptionId
+									+ "/client/" + clientId,
+							HttpMethod.GET, null, new ParameterizedTypeReference<SubscriptionInfoDto>() {
+							});
+		} catch (HttpStatusCodeException e) {
+			return ResponseEntity.status(HttpStatus.FAILED_DEPENDENCY)
+					.body("There has been a problem in subscription service");
 
-		return restTemplate
-				.exchange(
-						"http://" + subscriptionServiceHost + "/subscriptions/subscription/" + subscriptionId
-								+ "/client/" + clientId,
-						HttpMethod.GET, null, new ParameterizedTypeReference<SubscriptionInfoDto>() {
-						});
+		}
+
 	}
 
 	/**
 	 * A client subscribes to a newsletter
+	 * 
 	 * @param subscriptionId
 	 * @param clientId
 	 * @return clientId
 	 */
 	@PostMapping("subscription/{subscriptionId}/client/{clientId}")
-	public ResponseEntity<UserDto> createSubscription(@PathVariable String subscriptionId,
-			@PathVariable String clientId) {
+	public ResponseEntity createSubscription(@PathVariable String subscriptionId, @PathVariable String clientId) {
+		try {
+			return restTemplate
+					.exchange(
+							"http://" + subscriptionServiceHost + "/subscriptions/subscription/" + subscriptionId
+									+ "/client/" + clientId,
+							HttpMethod.POST, null, new ParameterizedTypeReference<UserDto>() {
+							});
+		} catch (HttpStatusCodeException e) {
+			return ResponseEntity.status(HttpStatus.FAILED_DEPENDENCY)
+					.body("There has been a problem in subscription service");
 
-		return restTemplate
-				.exchange(
-						"http://" + subscriptionServiceHost + "/subscriptions/subscription/" + subscriptionId
-								+ "/client/" + clientId,
-						HttpMethod.POST, null, new ParameterizedTypeReference<UserDto>() {
-						});
+		}
+
 	}
 
 	/**
 	 * A client unsubscribes to a newsletter
+	 * 
 	 * @param subscriptionId
 	 * @param clientId
 	 * @return clientId
 	 */
 	@DeleteMapping("subscription/{subscriptionId}/client/{clientId}")
-	public ResponseEntity<UserDto> deleteSubscription(@PathVariable String subscriptionId,
-			@PathVariable String clientId) {
-		return restTemplate
-				.exchange(
-						"http://" + subscriptionServiceHost + "/subscriptions/subscription/" + subscriptionId
-								+ "/client/" + clientId,
-						HttpMethod.DELETE, null, new ParameterizedTypeReference<UserDto>() {
-						});
+	public ResponseEntity deleteSubscription(@PathVariable String subscriptionId, @PathVariable String clientId) {
+		try {
+			return restTemplate
+					.exchange(
+							"http://" + subscriptionServiceHost + "/subscriptions/subscription/" + subscriptionId
+									+ "/client/" + clientId,
+							HttpMethod.DELETE, null, new ParameterizedTypeReference<UserDto>() {
+							});
+		} catch (HttpStatusCodeException e) {
+			return ResponseEntity.status(HttpStatus.FAILED_DEPENDENCY)
+					.body("There has been a problem in subscription service");
+
+		}
+
 	}
 
 	/**
 	 * A newsletter is sent to all subscribers
+	 * 
 	 * @param newsletterId
 	 * @return an ok message
 	 */
 	@PostMapping("send-newsletter/{newsletterId}")
-	public ResponseEntity<ResponseDto> sendNewsletter(@PathVariable String newsletterId) {
-		return restTemplate.exchange("http://" + emailServiceHost + "/subscriptions/send-newsletter/" + newsletterId,
-				HttpMethod.POST, null, new ParameterizedTypeReference<ResponseDto>() {
-				});
+	public ResponseEntity sendNewsletter(@PathVariable String newsletterId) {
+		try {
+			return restTemplate.exchange(
+					"http://" + emailServiceHost + "/subscriptions/send-newsletter/" + newsletterId, HttpMethod.POST,
+					null, new ParameterizedTypeReference<ResponseDto>() {
+					});
+		} catch (HttpStatusCodeException e) {
+			return ResponseEntity.status(HttpStatus.FAILED_DEPENDENCY)
+					.body("There has been a problem in email service");
+
+		}
 	}
 }
